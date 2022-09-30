@@ -16,8 +16,8 @@ class google_service():
         import pickle
 
         self.creds = None
-        if os.path.exists('auth_token.pickle'):
-            with open('auth_token.pickle', 'rb') as token:
+        if os.path.exists('ceres_token.pickle'):
+            with open('ceres_token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
 
         if not self.creds or not self.creds.valid:
@@ -29,6 +29,6 @@ class google_service():
                 self.creds = flow.run_local_server(port = 0)
 
 
-            with open('auth_token.pickle', 'wb') as token:
+            with open('ceres_token.pickle', 'wb') as token:
                 pickle.dump(self.creds, token)
 

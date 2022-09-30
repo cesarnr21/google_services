@@ -22,8 +22,17 @@ email.send_email('source_email', 'target_email')
 ## Google Drive and Google Sheets
 
 # TO DO
+- worth looking into:
+    - <https://github.com/jeremyephron/simplegmail#downloading-attachments>
+        - receiving emails
+        - downloading attachments
+    - <https://github.com/dermasmid/google-workspace>
+        - similar to what you are doing. some drive components
+    - node.js client: <https://github.com/levz0r/gmail-tester>
 - add instructions to creating google credentials
-- change how text files are sent, maybe remove all the options for storing different files
+- send email to multiple people
+- change how text files are sent, maybe remove all the options for storing different files.
+    - check this out: <https://developers.google.com/gmail/api/guides/uploads>
 - try sending videos, and other files
 - Is `create_draft()` neccessary
 - Add functionality to receive emails and proccess them
