@@ -8,6 +8,6 @@ class drive_action(google_service):
 
 
 
-class sheets_access(drive_action):
+class google_sheet(drive_action):
     def __init__(self):
         drive_action.__init__(self)

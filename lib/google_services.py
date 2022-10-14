@@ -10,7 +10,7 @@ class google_service():
         from google.auth.transport.requests import Request
 
         """eliminate the verification proccess"""
-        """docs here: https://www.thepythoncode.com/article/use-gmail-api-in-python"""
+        """docs here: https://www.thepythoncode.com/article/use-gmail-api-in-python """
         import os, sys
         sys.path.append(__file__[:-len('lib/google_services.py')])
         import pickle
