@@ -1,27 +1,39 @@
 # Google Services
-Just some modules that allow to use some Google Services. To Google Services and APIs, they needs to be setup
+Just some modules that allow to use some Google Services. To use Google Services and APIs, they need to be setup
 - instructions here: <https://www.thepythoncode.com/article/use-gmail-api-in-python>
 
 Then download the API credentials to a `json` file and add it to the working directory.
+A lot of code used in these modules came from this [Gmail API Tutorial](https://www.thepythoncode.com/article/use-gmail-api-in-python#Reading_Emails), it presents more of a functional programming approach, but these modules should be easier to use.
 
 ## Gmail Module
-The `gmail_services.py` includes the class `gmail_message` which allows to send emails and attachments. Functions in the class:
-- `build_message(subject = 'str', content = 'str', attachments = 'str or tuple')`. This is used to put together the message being sent.
-- Another way to add attachements to the email message is to use the `add_attachments()` function. Argument can either be a `string` for a single attachment or a `tuple` for multiple. It is important to add the full path of the attachment. The `os.path.anspath()` can be used to help with this.
-- `send_email()` can be used after building a message to send the email. The arguments are the source email and a destination email address.
+### Sending Emails
+The `gmail_services.py` module includes the class `gmail_message` which allows to send emails and attachments. To send an email:
+1. Used the `build_message(subject: str, content: str, attachments: Union[str, tuple)` function. This is used to put together the message being sent.
+    - Another way to add attachements to the email message is to use the `add_attachments()` function. Argument can either be a `string` for a single attachment or a `tuple` for multiple. It is important to add the full path of the attachment. The `os.path.anspath()` can be used to help with this.
+2. `send_email()` can be used after building a message to send the email. The arguments are the source email and a destination email address.
 ```py
 from gmail_services import gmail_message
 
-email = gmail_message(creds_file = 'credentials.json')
+email = gmail_message(creds_file = 'path/credentials.json')
 
 email.build_message(subject = ' ', content = ' ', attachments = ('file1', 'file2'))
-email.add_attachments(attachments = ('files', 'files'))
+email.add_attachments(attachments = ('file3', 'file4')) # optional: if you want to add attachments after building the message
 email.send_email('source_email', 'target_email')
 ```
+
+### Reading Emails
+To read emails, use the `gmail_action` class. 
+
+### Other Actions
 
 ## Google Drive and Google Sheets
 
 # TO DO
+- should `attachemtns` in the message dictionary be stored as `dict` or a `list`. can't do `tuple` because then you wouldn't be able to add more attachments.
+- change function parameters for `build_message` attribute. 
+- add type hints to all functions
+- work on the query system `email_action`. add the functionality of 
+- check that sending attachments work from directories outside the `google services` directory
 - worth looking into:
     - <https://github.com/jeremyephron/simplegmail#downloading-attachments>
         - receiving emails
@@ -39,32 +51,4 @@ email.send_email('source_email', 'target_email')
 
 
 ## Bugs/Issues
-- Error with running:
-```py
-import json
-
-project_path = __file__[:-len('test/send_email_test.py')]
-
-settings = project_path + 'test.json'
-
-with open(settings, 'r') as file:
-    config = json.load(file)
-
-import sys, os
-sys.path.append(project_path)
-sys.path.append(project_path + './lib/')
-sys.path.append(project_path + './data/')
-from gmail_services import gmail_message
-
-from datetime import datetime
-now = datetime.now()
-
-email = gmail_message(creds_file = project_path + config['creds'])
-email.build_message(subject = 'Initial Test', content = 'Current time is ' + now.strftime('%H:%M:%S'), attachments = os.path.abspath('file1.txt'))
-email.add_attachments(attachments = (os.path.abspath('file542.txt'), os.path.abspath('screenshot.png')))
-email.send_email(config['mail'], config['mail'])
-```
-
-calling this from the terminal in a separate directory in the terminal gives out an `FileNotFoundError`
-
 - Error with subject highlighting without any attachments
