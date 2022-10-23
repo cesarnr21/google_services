@@ -14,10 +14,13 @@ The `gmail_services.py` module includes the class `gmail_message` which allows t
 ```py
 from gmail_services import gmail_message
 
-email = gmail_message(creds_file = 'path/credentials.json')
+creds_file = 'path'
+auth_file = 'path'
 
-email.build_message(subject = ' ', content = ' ', attachments = ('file1', 'file2'))
-email.add_attachments(attachments = ('file3', 'file4')) # optional: if you want to add attachments after building the message
+email = gmail_message(creds_file, auth_file)
+
+email.build_message(subject = ' ', content = ' ', attachments = ('path/file1', 'path/file2'))
+email.add_attachments(attachments = ('path/file3', 'path/file4')) # optional: if you want to add attachments after building the message
 email.send_email('source_email', 'target_email')
 ```
 
@@ -30,9 +33,8 @@ To read emails, use the `gmail_action` class.
 
 # TO DO
 - should `attachemtns` in the message dictionary be stored as `dict` or a `list`. can't do `tuple` because then you wouldn't be able to add more attachments.
-- change function parameters for `build_message` attribute. 
-- add type hints to all functions
-- work on the query system `email_action`. add the functionality of 
+- add exceptions if there are no `auth_file` or `creds_file` given
+- add option to use `mark_as_read` and other gmail actions by specifying an expecific email, instead of relying on `search_email`
 - check that sending attachments work from directories outside the `google services` directory
 - worth looking into:
     - <https://github.com/jeremyephron/simplegmail#downloading-attachments>
@@ -48,7 +50,11 @@ To read emails, use the `gmail_action` class.
 - try sending videos, and other files
 - Is `create_draft()` neccessary
 - Add functionality to receive emails and proccess them
-
+- add a `create_query()` to simplify the querying proccess. maybe create `guery` class?
+    - search emails by:
+        - unread
+        - starred
+    - examplee: <https://github.com/jeremyephron/simplegmail/blob/master/simplegmail/query.py>
 
 ## Bugs/Issues
 - Error with subject highlighting without any attachments

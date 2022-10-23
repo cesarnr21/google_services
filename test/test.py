@@ -1,23 +1,24 @@
 # searching for emails
 
-import json
-
 project_path = __file__[:-len('test/test.py')]
 
 settings = project_path + 'test.json'
 
-with open(settings, 'r') as file:
-    config = json.load(file)
+creds_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_creds.json'
+auth_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_token.pickle'
 
 import sys, os
 sys.path.append(project_path + './lib/')
 sys.path.append(project_path + './data/')
 from gmail_services import gmail_action
 
-email = gmail_action(creds_file = config['ceres_gapi_creds'])
-email.create_query("test_4")
+email = gmail_action(creds_file, auth_file)
+email.create_query("test 3")
 email.search_email()
-email.read_message(email.messages[0])
-#email.read_message(email.search_email())
-email.mark_as_unread()
 
+non_attach = ('tmobilespace.gif', 'dottedline600.gof', 'footer.gif')
+
+email.read_message(email.messages[0], non_attach)
+#email.read_message(email.search_email())
+#email.mark_as_unread()
+#email.delete_email()
