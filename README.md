@@ -50,11 +50,12 @@ To read emails, use the `gmail_action` class.
 - try sending videos, and other files
 - Is `create_draft()` neccessary
 - Add functionality to receive emails and proccess them
-- add a `create_query()` to simplify the querying proccess. maybe create `guery` class?
+- add a `create_query()` to simplify the querying proccess. maybe create `guery` class? this will denpend on the querying proccess for google drive and sheets
     - search emails by:
         - unread
         - starred
     - examplee: <https://github.com/jeremyephron/simplegmail/blob/master/simplegmail/query.py>
+- work with `notify` to print statements if the user wants
 
 ## Bugs/Issues
 - Error with subject highlighting without any attachments

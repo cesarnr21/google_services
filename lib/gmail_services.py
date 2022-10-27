@@ -1,7 +1,7 @@
 from base64 import urlsafe_b64decode
 from email import message
 from typing import Dict
-from google_services import google_service
+from google_services import GoogleService
 import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -12,13 +12,11 @@ from mimetypes import guess_type as guess_mime_type
 import os
 
 
-
-
-class gmail_message(google_service):
+class GmailMessage(GoogleService):
     """docs here: https://www.thepythoncode.com/article/use-gmail-api-in-python """
-    def __init__(self, creds_file: str = None, auth_file: str = None):
+    def __init__(self, creds_file: str = None, auth_file: str = None, notify: bool = False):
         app_scope = ['https://mail.google.com/']
-        google_service.__init__(self, app_scope, creds_file, auth_file)
+        GoogleService.__init__(self, app_scope, creds_file, auth_file)
         from googleapiclient.discovery import build
         self.service = build('gmail', 'v1', credentials = self.creds)
 
@@ -78,7 +76,6 @@ class gmail_message(google_service):
             print("ERROR: Attachments not found. Make sure you specify full path of file you want to attach")
 
 
-
     def create_draft(self):
         """docs here: https://developers.google.com/gmail/api/guides/drafts """
         print("create draft test:\n------------------------")
@@ -115,20 +112,18 @@ class gmail_message(google_service):
         return self.message
 
 
-
-
-
-class gmail_action(google_service):
+class GmailAction(GoogleService):
     """docs here: 
     https://developers.google.com/gmail/api/guides/push 
     https://www.thepythoncode.com/article/use-gmail-api-in-python#Reading_Emails
     """
 
-    def __init__(self, creds_file: str = None, auth_file: str = None):
+    def __init__(self, creds_file: str = None, auth_file: str = None, notify: bool = False):
         app_scope = ['https://mail.google.com/']
-        google_service.__init__(self, app_scope, creds_file, auth_file)
+        GoogleService.__init__(self, app_scope, creds_file, auth_file)
         from googleapiclient.discovery import build
         self.service = build('gmail', 'v1', credentials = self.creds)
+        self.notify = notify
 
 
     def get_size_format(self, b, factor = 1024, suffix="B"):
@@ -245,7 +240,6 @@ class gmail_action(google_service):
                 data = body.get("data")
                 file_size = body.get("size")
                 part_headers = part.get("headers")
-                
 
                 if file_name not in non_attach:
 
@@ -275,16 +269,14 @@ class gmail_action(google_service):
 
 
                                     attachment_id = body.get("attachmentId")
-
-        print("=" * 50)
-
-    # complete this
-    def print_email(self):
         print("=" * 50)
 
 
-    # make this way better
-    def save_email(self, folder, file_name: str) -> None:
+    def print_email(self): # complete this
+        print("=" * 50)
+
+
+    def save_email(self, folder, file_name: str) -> None: # make this way better
         if not file_name:
             file_name = "index.html"
 
@@ -304,6 +296,7 @@ class gmail_action(google_service):
         file_size = 'place_holder'
 
         attachment = self.service.users().messages().attachments().get(id = attachment_id, userId = 'me', messageId = message['id']).execute()
+
         data = attachment.get("data")
         file_path = os.path.join(file_name)
         if data:
@@ -317,16 +310,17 @@ class gmail_action(google_service):
         messages_to_mark = self.search_email()
         # remove after done
         print("Matched emails:", len(messages_to_mark))
-        return self.service.users().messages().batchModify(userId = 'me', body = {'ids': [ msg['id'] for msg in messages_to_mark ], 'removeLabelIds': ['UNREAD']}).execute()
+        return self.service.users().messages().batchModify(userId = 'me', body = {'ids': [msg['id'] for msg in messages_to_mark], 'removeLabelIds': ['UNREAD']}).execute()
 
 
     def mark_as_unread(self):
         messages_to_mark = self.search_email()
         # remove after done
         print("Matched emails:", len(messages_to_mark))
-        return self.service.users().messages().batchModify(userId = 'me', body = {'ids': [ msg['id'] for msg in messages_to_mark ], 'addLabelIds': ['UNREAD']}).execute()
+        return self.service.users().messages().batchModify(userId = 'me', body = {'ids': [msg['id'] for msg in messages_to_mark], 'addLabelIds': ['UNREAD']}).execute()
 
 
     def delete_email(self):
         messages_to_delete = self.search_email()
-        return self.service.users().messages().batchDelete(userId = 'me', body = {'ids': [ msg['id'] for msg in messages_to_delete]}).execute()
+        return self.service.users().messages().batchDelete(userId = 'me', body = {'ids': [msg['id'] for msg in messages_to_delete]}).execute()
+

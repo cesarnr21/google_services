@@ -1,18 +1,18 @@
-
+import google.auth
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import os
+import pickle
 from copyreg import pickle
 
 
-class google_service():
+class GoogleService():
     def __init__(self, app_scope: list[str], creds_file: str = None, auth_file: str = None,) -> None:
-        import google.auth
-        from googleapiclient.discovery import build
-        from google_auth_oauthlib.flow import InstalledAppFlow
-        from google.auth.transport.requests import Request
-
-        """eliminate the verification proccess"""
-        """docs here: https://www.thepythoncode.com/article/use-gmail-api-in-python """
-        import os
-        import pickle
+        """
+        eliminate the verification proccess
+        docs here: https://www.thepythoncode.com/article/use-gmail-api-in-python 
+        """
 
         self.creds = None
         if os.path.exists(auth_file):
