@@ -10,9 +10,9 @@ auth_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_token.pick
 import sys, os
 sys.path.append(project_path + './lib/')
 sys.path.append(project_path + './data/')
-from gmail_services import gmail_action
+from gmail_services import GmailAction
 
-email = gmail_action(creds_file, auth_file)
+email = GmailAction(creds_file, auth_file)
 email.create_query("test 3")
 email.search_email()
 

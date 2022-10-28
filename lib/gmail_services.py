@@ -27,18 +27,18 @@ class GmailMessage(GoogleService):
             subject = 'no_subject'
 
         if len(attachments) != 0:
-            attach_buf = {}
+            attach_buf = []
 
             if len(attachments) == 1:
                 attach_buf[0] = attachments
             else:
                 for i in range(len(attachments)):
-                    attach_buf[i] = attachments[i]
+                    attach_buf.append(attachments[i])
 
-            self.message = {'subject' : subject, 'content' : content, 'attachments' : attach_buf}
+            self.message = {'subject': subject, 'content': content, 'attachments': attach_buf}
 
         else:
-            self.message = {'subject' : subject, 'content' : content, 'attachments' : attachments}
+            self.message = {'subject': subject, 'content': content, 'attachments': attachments}
 
         return self.message
 
@@ -47,6 +47,7 @@ class GmailMessage(GoogleService):
         content_type, encoding = guess_mime_type(attachment)
         if content_type is None or encoding is not None:
             content_type = 'application/octet-stream'
+
         main_type, sub_type = content_type.split('/', 1)
 
         try:
@@ -60,11 +61,11 @@ class GmailMessage(GoogleService):
 
             elif main_type == 'audio':
                 with open(attachment, 'rb') as file:
-                   msg = MIMEAudio(file.read(), _subtype = sub_type)
+                    msg = MIMEAudio(file.read(), _subtype = sub_type)
 
             else:
                 with open(attachment, 'rb') as file:
-                   msg = MIMEBase(main_type, sub_type)
+                    msg = MIMEBase(main_type, sub_type)
                 msg.set_payload(file.read())
 
             attachment = os.path.basename(attachment)
@@ -104,10 +105,9 @@ class GmailMessage(GoogleService):
         self.service.users().messages().send(userId = 'me', body = {'raw': base64.urlsafe_b64encode(mail.as_bytes()).decode()}).execute()
 
 
-    def add_attachments(self, attachments = ()):
-        index = len(self.message['attachments'])
+    def add_attachments(self, attachments: tuple = ()):
         for i in range(len(attachments)):
-            self.message['attachments'][index + i] = attachments[i]
+            self.message['attachments'].append(attachments[i])
 
         return self.message
 

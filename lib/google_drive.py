@@ -23,7 +23,7 @@ class DriveAction(GoogleService):
 
 
     # should this be diffent from a share folder method?
-    def share_file(self, file_name: str, destination: str):
+    def share_file(self, file_name: str, permissions: str):
         pass
 
 
