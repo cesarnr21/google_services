@@ -84,25 +84,31 @@ class GmailMessage(GoogleService):
         return self.message
 
 
-    def send_email(self, source_mail: str, target_mail: str) -> None:
+    def send_email(self, source_mail: str, target_mail: str | tuple | list) -> None:
         """docs here: https://developers.google.com/gmail/api/guides/sending """
-        if not self.message['attachments']:
-            mail = MIMEText(self.message['content'])
-            mail['To'] = target_mail
-            mail['From'] = source_mail
-            mail['Subject'] = self.message['subject']
+        if isinstance(target_mail, str):
+            recipients = 1
+        elif isinstance(target_mail, list) or isinstance(target_mail, tuple):
+            recipients = len(target_mail)
 
-        else:
-            mail = MIMEMultipart()
-            mail['To'] = target_mail
-            mail['From'] = source_mail
-            mail['Subject'] = self.message['subject']
-            mail.attach(MIMEText(self.message['content']))
+        for i in range(recipients):
+            if not self.message['attachments']:
+                mail = MIMEText(self.message['content'])
+                mail['To'] = target_mail if isinstance(target_mail, str) else target_mail[i]
+                mail['From'] = source_mail
+                mail['Subject'] = self.message['subject']
 
-            for i in range(len(self.message['attachments'])):
-                self.build_attach(mail, self.message['attachments'][i])
+            else:
+                mail = MIMEMultipart()
+                mail['To'] = target_mail if isinstance(target_mail, str) else target_mail[i]
+                mail['From'] = source_mail
+                mail['Subject'] = self.message['subject']
+                mail.attach(MIMEText(self.message['content']))
 
-        self.service.users().messages().send(userId = 'me', body = {'raw': base64.urlsafe_b64encode(mail.as_bytes()).decode()}).execute()
+                for i in range(len(self.message['attachments'])):
+                    self.build_attach(mail, self.message['attachments'][i])
+
+            self.service.users().messages().send(userId = 'me', body = {'raw': base64.urlsafe_b64encode(mail.as_bytes()).decode()}).execute()
 
 
     def add_attachments(self, attachments: tuple = ()):
@@ -145,13 +151,8 @@ class GmailAction(GoogleService):
         return "".join(c if c.isalnum() else "_" for c in text)
 
 
-    def create_query(self, query):
-        self.query = query
-        return self.query
-
-
-    def search_email(self, query = None):
-        result = self.service.users().messages().list(userId = 'me', q = self.query).execute()
+    def search_email(self, query):
+        result = self.service.users().messages().list(userId = 'me', q = query).execute()
         self.messages = [ ]
         if 'messages' in result:
             self.messages.extend(result['messages'])
@@ -223,7 +224,7 @@ class GmailAction(GoogleService):
                                         file.write(urlsafe_b64decode(data))
 
 
-    def read_message(self, message: dict, non_attach: tuple = None) -> None:
+    def read_message(self, message: list, non_attach: tuple = None) -> None:
         self.message = {}
         msg = self.service.users().messages().get(userId = 'me', id = message['id'], format = 'full').execute()
         payload = msg['payload']
@@ -267,9 +268,7 @@ class GmailAction(GoogleService):
                                     index = len(self.message['attachments'])
                                     self.message['attachments'][index]['id'] = body.get("attachmentId")
 
-
                                     attachment_id = body.get("attachmentId")
-        print("=" * 50)
 
 
     def print_email(self): # complete this
@@ -324,3 +323,41 @@ class GmailAction(GoogleService):
         messages_to_delete = self.search_email()
         return self.service.users().messages().batchDelete(userId = 'me', body = {'ids': [msg['id'] for msg in messages_to_delete]}).execute()
 
+
+def create_query(*query: str) -> tuple[str]:
+    """
+    create a query to seach email. operators list from: https://support.google.com/mail/answer/7190
+
+    Inputs:
+    from: specify the sender
+    to: specify recipient
+    cc: recipient of carbon copy
+    bcc: recipient of blind carbon copy
+    subject: words in subject line
+    has: emails that have any of the following attachments of links
+        - attachment
+        - drive
+        - document
+        - spreadsheet
+        - presentation
+        - youtube
+    label: specify label
+    filename: emails with attachments with a certain name or file type
+        - filename:pdf
+        - filename:homework.txt
+    in: emails in specific folders
+
+    is: emails that are marked as important, starred, snoozed, unread, read
+        - is:important
+        - is:starred
+        - is:snoozed
+        - is:unread
+        - is:read
+    after:
+    before:
+    older:
+    newer:
+    """
+
+    query = query
+    return query
