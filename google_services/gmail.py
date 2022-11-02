@@ -21,8 +21,7 @@ class GmailMessage(GoogleService):
         self.service = build('gmail', 'v1', credentials = self.creds)
 
 
-    def build_message(self, content: str = None, subject: str = None, attachments: tuple = None) -> dict[str, str]:
-        """check this out about optional parameters: https://pybit.es/articles/code-better-with-type-hints-part-3/ """
+    def build_message(self, content: str = None, subject: str = None, attachments: tuple = None) -> dict[str, str, list[str]]:
         if subject == '':
             subject = 'no_subject'
 
@@ -325,39 +324,6 @@ class GmailAction(GoogleService):
 
 
 def create_query(*query: str) -> tuple[str]:
-    """
-    create a query to seach email. operators list from: https://support.google.com/mail/answer/7190
-
-    Inputs:
-    from: specify the sender
-    to: specify recipient
-    cc: recipient of carbon copy
-    bcc: recipient of blind carbon copy
-    subject: words in subject line
-    has: emails that have any of the following attachments of links
-        - attachment
-        - drive
-        - document
-        - spreadsheet
-        - presentation
-        - youtube
-    label: specify label
-    filename: emails with attachments with a certain name or file type
-        - filename:pdf
-        - filename:homework.txt
-    in: emails in specific folders
-
-    is: emails that are marked as important, starred, snoozed, unread, read
-        - is:important
-        - is:starred
-        - is:snoozed
-        - is:unread
-        - is:read
-    after:
-    before:
-    older:
-    newer:
-    """
-
+    """create a query to seach email. operators list from: https://support.google.com/mail/answer/7190 """
     query = query
     return query

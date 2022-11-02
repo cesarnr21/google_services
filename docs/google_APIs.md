@@ -7,7 +7,7 @@ self.service.users().messages().list(userId = 'me', q = 'query').execute()
 ```
 is a list of emails that match the search query
 
-## Gmail Query
+### Gmail Search Query
 For a full list of Gmail search Operators, go here: <https://support.google.com/mail/answer/7190>
 
 --------------------------------------------------------
