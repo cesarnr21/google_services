@@ -7,8 +7,8 @@ from googol import create_query
 project_path = __file__[:-len('test/test.py')]
 sys.path.append(project_path + './data/')
 
-creds_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_creds.json'
-auth_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_token.pickle'
+creds_file = 'path/file_name'
+auth_file = 'path/file_name'
 
 email = GmailAction(creds_file, auth_file)
 query = create_query('test 3', 'to:ceres.assistant@gmail.com')
