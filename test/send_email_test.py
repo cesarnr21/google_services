@@ -3,10 +3,13 @@
 import sys
 import os
 from datetime import datetime
-from googol import GmailMessage
+
 
 project_path = __file__[:-len('test/send_email_test.py')]
+sys.path.append(project_path + './lib/')
 sys.path.append(project_path + './data/')
+
+from gmail_services import GmailMessage
 
 creds_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_creds.json'
 auth_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_token.pickle'

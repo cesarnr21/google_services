@@ -1,6 +1,6 @@
 # Google Services
 Just some modules that allow to use some Google Services. Install using:
-`python3 -m pip install --editable .`
+`python3 -m pip install --editable`
 
 To use Google Services and APIs, they need to be setup
 - instructions here: <https://www.thepythoncode.com/article/use-gmail-api-in-python>
@@ -17,7 +17,7 @@ python3 -m pip install -r requirements.txt
 ## Gmail Module
 ### Sending Emails
 The `gmail.py` module includes the class `GmailMessage` which allows to send emails and attachments. To send an email:
-1. Used the `build_message(subject: str, content: str, attachments: Union[str, tuple])` function. This is used to put together the message being sent.
+1. Used the `build_message(subject: str, content: str, attachments: Union[str, tuple)` function. This is used to put together the message being sent.
     - Another way to add attachements to the email message is to use the `add_attachments()` function. Argument can either be a `string` for a single attachment or a `tuple` for multiple. It is important to add the full path of the attachment. The `os.path.anspath()` can be used to help with this.
 2. `send_email()` can be used after building a message to send the email. The arguments are the source email and a destination email address.
 ```py
