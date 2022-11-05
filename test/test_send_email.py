@@ -1,4 +1,6 @@
-# template for creating messages and using a messanges
+"""
+This is a script to test the capability of creating and sending an email with attachments
+"""
 
 import sys
 import os

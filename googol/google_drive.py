@@ -1,5 +1,5 @@
 import google.auth
-from google import GoogleService
+from .google import GoogleService
 import os
 
 class DriveAction(GoogleService):
