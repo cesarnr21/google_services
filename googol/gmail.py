@@ -1,7 +1,7 @@
 from base64 import urlsafe_b64decode
 from email import message
 from typing import Dict
-from google_services import GoogleService
+from google import GoogleService
 import base64
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText

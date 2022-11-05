@@ -1,13 +1,12 @@
 # searching for emails
 
 import sys, os
+from googol import GmailAction
+from googol import create_query
 
 project_path = __file__[:-len('test/gmail_action_tests.py')]
 sys.path.append(project_path + './lib/')
 sys.path.append(project_path + './data/')
-
-from gmail_services import GmailAction
-from gmail_services import create_query
 
 creds_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_creds.json'
 auth_file = '/Users/cesarnunezrodriguez/local/projects/settings/ceres_google_token.pickle'
